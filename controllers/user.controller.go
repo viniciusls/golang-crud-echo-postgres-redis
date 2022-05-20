@@ -3,7 +3,6 @@ package controllers
 import (
 	"crud-echo-postgres-redis/dao"
 	"crud-echo-postgres-redis/models"
-	"encoding/json"
 	"fmt"
 	"github.com/labstack/echo/v4"
 	"log"
@@ -17,11 +16,6 @@ type response struct {
 }
 
 func GetAllUsers(c echo.Context) error {
-	res.Header().Set("Content-Type", "application/json")
-	res.Header().Set("Access-Control-Allow-Origin", "*")
-	res.Header().Set("Access-Control-Allow-Methods", "GET")
-	res.Header().Set("Access-Control-Allow-Headers", "Content-Type")
-
 	users, err := dao.GetAllUsers()
 	if err != nil {
 		log.Fatalf("Unable to get all users. %v", err)
@@ -31,17 +25,9 @@ func GetAllUsers(c echo.Context) error {
 }
 
 func GetUser(c echo.Context) error {
-	res.Header().Set("Content-Type", "application/json")
-	res.Header().Set("Access-Control-Allow-Origin", "*")
-	res.Header().Set("Access-Control-Allow-Methods", "GET")
-	res.Header().Set("Access-Control-Allow-Headers", "Content-Type")
-
-	params := mux.Vars(req)
-
-	id, err := strconv.Atoi(params["id"])
-
+	id, err := strconv.Atoi(c.FormValue("id"))
 	if err != nil {
-		log.Fatalf("Unable to convert the string into int. %v", err)
+		log.Fatalf("Unable to decode the request body. %v", err)
 	}
 
 	user, err := dao.GetUser(int64(id))
@@ -53,22 +39,16 @@ func GetUser(c echo.Context) error {
 }
 
 func CreateUser(c echo.Context) error {
-	res.Header().Set("Content-Type", "application/json")
-	res.Header().Set("Access-Control-Allow-Origin", "*")
-	res.Header().Set("Access-Control-Allow-Methods", "POST")
-	res.Header().Set("Access-Control-Allow-Headers", "Content-Type")
-
 	var user models.User
 
-	err := json.NewDecoder(req.Body).Decode(&user)
-	if err != nil {
+	if err := c.Bind(user); err != nil {
 		log.Fatalf("Unable to decode the request body. %v", err)
 	}
 
-	insertID := dao.InsertUser(user)
+	insertId := dao.InsertUser(user)
 
 	res := response{
-		Id:      insertID,
+		Id:      insertId,
 		Message: "User created successfully",
 	}
 
@@ -76,14 +56,7 @@ func CreateUser(c echo.Context) error {
 }
 
 func UpdateUser(c echo.Context) error {
-	res.Header().Set("Content-Type", "application/x-www-form-urlencoded")
-	res.Header().Set("Access-Control-Allow-Origin", "*")
-	res.Header().Set("Access-Control-Allow-Methods", "PUT")
-	res.Header().Set("Access-Control-Allow-Headers", "Content-Type")
-
-	params := mux.Vars(req)
-
-	id, err := strconv.Atoi(params["id"])
+	id, err := strconv.Atoi(c.FormValue("id"))
 
 	if err != nil {
 		log.Fatalf("Unable to decode the request body. %v", err)
@@ -91,8 +64,7 @@ func UpdateUser(c echo.Context) error {
 
 	var user models.User
 
-	err = json.NewDecoder(req.Body).Decode(&user)
-	if err != nil {
+	if err := c.Bind(user); err != nil {
 		log.Fatalf("Unable to decode the request body. %v", err)
 	}
 
@@ -109,14 +81,7 @@ func UpdateUser(c echo.Context) error {
 }
 
 func DeleteUser(c echo.Context) error {
-	res.Header().Set("Content-Type", "application/x-www-form-urlencoded")
-	res.Header().Set("Access-Control-Allow-Origin", "*")
-	res.Header().Set("Access-Control-Allow-Methods", "DELETE")
-	res.Header().Set("Access-Control-Allow-Headers", "Content-Type")
-
-	params := mux.Vars(req)
-
-	id, err := strconv.Atoi(params["id"])
+	id, err := strconv.Atoi(c.FormValue("id"))
 
 	if err != nil {
 		log.Fatalf("Unable to decode the request body. %v", err)

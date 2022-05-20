@@ -5,13 +5,14 @@ import (
 	"crud-echo-postgres-redis/models"
 	"database/sql"
 	"fmt"
+	_ "github.com/lib/pq"
 	"log"
 )
 
 func createConnection() *sql.DB {
 	env, err := config.LoadConfig(".")
 	if err != nil {
-		log.Fatalf("Error loading .env file")
+		log.Fatalf("Error loading app.env file")
 	}
 
 	db, err := sql.Open(env.DBDriver, env.DBSource)
@@ -35,7 +36,7 @@ func GetAllUsers() ([]models.User, error) {
 	defer func(db *sql.DB) {
 		err := db.Close()
 		if err != nil {
-
+			log.Fatalf("Unable to close database connection")
 		}
 	}(db)
 
@@ -51,7 +52,7 @@ func GetAllUsers() ([]models.User, error) {
 	defer func(rows *sql.Rows) {
 		err := rows.Close()
 		if err != nil {
-
+			log.Fatalf("Unable to close rows pointer")
 		}
 	}(rows)
 
@@ -75,7 +76,7 @@ func GetUser(id int64) (models.User, error) {
 	defer func(db *sql.DB) {
 		err := db.Close()
 		if err != nil {
-
+			log.Fatalf("Unable to close database connection")
 		}
 	}(db)
 
@@ -106,7 +107,7 @@ func InsertUser(user models.User) int64 {
 	defer func(db *sql.DB) {
 		err := db.Close()
 		if err != nil {
-
+			log.Fatalf("Unable to close database connection")
 		}
 	}(db)
 
@@ -130,7 +131,7 @@ func UpdateUser(id int64, user models.User) int64 {
 	defer func(db *sql.DB) {
 		err := db.Close()
 		if err != nil {
-
+			log.Fatalf("Unable to close database connection")
 		}
 	}(db)
 
@@ -157,7 +158,7 @@ func DeleteUser(id int64) int64 {
 	defer func(db *sql.DB) {
 		err := db.Close()
 		if err != nil {
-
+			log.Fatalf("Unable to close database connection")
 		}
 	}(db)
 
