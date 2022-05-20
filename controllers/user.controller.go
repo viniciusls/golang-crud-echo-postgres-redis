@@ -39,7 +39,7 @@ func GetUser(c echo.Context) error {
 }
 
 func CreateUser(c echo.Context) error {
-	var user models.User
+	user := new(models.User)
 
 	if err := c.Bind(user); err != nil {
 		log.Fatalf("Unable to decode the request body. %v", err)
