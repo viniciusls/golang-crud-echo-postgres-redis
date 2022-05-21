@@ -60,3 +60,23 @@ func Get(key string) (string, error) {
 
 	return val, nil
 }
+
+func Del(key string) (bool, error) {
+	rdb := createConnection()
+
+	defer func(rdb *redis.Client) {
+		err := rdb.Close()
+		if err != nil {
+			log.Fatalf("Unable to close Redis connection. %v", err)
+		}
+	}(rdb)
+
+	_, err := rdb.Del(ctx, key).Result()
+	if err != nil {
+		log.Printf("Unable to delete value from cache. %v", err)
+
+		return false, err
+	}
+
+	return true, nil
+}

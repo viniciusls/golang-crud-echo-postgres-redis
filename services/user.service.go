@@ -58,7 +58,14 @@ func GetUser(id int64) (models.User, error) {
 }
 
 func CreateUser(user *models.User) int64 {
-	return dao.CreateUser(user)
+	insertId := dao.CreateUser(user)
+
+	_, err := helper.Del("all_users")
+	if err != nil {
+		log.Printf("Unable to cleanup all_users cache. %v", err)
+	}
+
+	return insertId
 }
 
 func UpdateUser(id int64, user *models.User) int64 {
