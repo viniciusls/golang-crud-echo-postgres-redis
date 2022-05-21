@@ -1,8 +1,8 @@
 package dao
 
 import (
+	"crud-echo-postgres-redis/api/users/model"
 	"crud-echo-postgres-redis/config"
-	"crud-echo-postgres-redis/models"
 	"database/sql"
 	"fmt"
 	_ "github.com/lib/pq"
@@ -30,7 +30,7 @@ func createConnection() *sql.DB {
 	return db
 }
 
-func GetAllUsers() ([]models.User, error) {
+func GetAllUsers() ([]model.User, error) {
 	db := createConnection()
 
 	defer func(db *sql.DB) {
@@ -40,7 +40,7 @@ func GetAllUsers() ([]models.User, error) {
 		}
 	}(db)
 
-	var users []models.User
+	var users []model.User
 
 	sqlStatement := `SELECT * FROM users`
 
@@ -57,7 +57,7 @@ func GetAllUsers() ([]models.User, error) {
 	}(rows)
 
 	for rows.Next() {
-		var user models.User
+		var user model.User
 
 		err = rows.Scan(&user.Id, &user.Name, &user.Age, &user.Location)
 		if err != nil {
@@ -70,7 +70,7 @@ func GetAllUsers() ([]models.User, error) {
 	return users, err
 }
 
-func GetUser(id int64) (models.User, error) {
+func GetUser(id int64) (model.User, error) {
 	db := createConnection()
 
 	defer func(db *sql.DB) {
@@ -80,7 +80,7 @@ func GetUser(id int64) (models.User, error) {
 		}
 	}(db)
 
-	var user models.User
+	var user model.User
 
 	sqlStatement := `SELECT * FROM users WHERE id = $1`
 
@@ -101,7 +101,7 @@ func GetUser(id int64) (models.User, error) {
 	return user, err
 }
 
-func CreateUser(user *models.User) int64 {
+func CreateUser(user *model.User) int64 {
 	db := createConnection()
 
 	defer func(db *sql.DB) {
@@ -125,7 +125,7 @@ func CreateUser(user *models.User) int64 {
 	return id
 }
 
-func UpdateUser(id int64, user *models.User) int64 {
+func UpdateUser(id int64, user *model.User) int64 {
 	db := createConnection()
 
 	defer func(db *sql.DB) {

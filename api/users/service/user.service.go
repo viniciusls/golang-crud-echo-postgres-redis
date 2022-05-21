@@ -1,19 +1,19 @@
-package services
+package service
 
 import (
-	"crud-echo-postgres-redis/dao"
-	"crud-echo-postgres-redis/helper"
-	"crud-echo-postgres-redis/models"
+	"crud-echo-postgres-redis/api/users/dao"
+	"crud-echo-postgres-redis/api/users/model"
+	"crud-echo-postgres-redis/redis"
 	"encoding/json"
 	"log"
 	"strconv"
 )
 
-func GetAllUsers() ([]models.User, error) {
+func GetAllUsers() ([]model.User, error) {
 	cacheKey := "all_users"
-	cachedContent, err := helper.Get(cacheKey)
+	cachedContent, err := redis.Get(cacheKey)
 	if err == nil {
-		var users []models.User
+		var users []model.User
 		if err := json.Unmarshal([]byte(cachedContent), &users); err != nil {
 			log.Fatalf("Unable to convert cached content to users. %v", err)
 		}
@@ -28,16 +28,16 @@ func GetAllUsers() ([]models.User, error) {
 		log.Fatalf("Unable to convert array to string. %v", err)
 	}
 
-	helper.Set(cacheKey, string(serialized), 0)
+	redis.Set(cacheKey, string(serialized), 0)
 
 	return users, err
 }
 
-func GetUser(id int64) (models.User, error) {
+func GetUser(id int64) (model.User, error) {
 	cacheKey := "user_" + strconv.Itoa(int(id))
-	cachedContent, err := helper.Get(cacheKey)
+	cachedContent, err := redis.Get(cacheKey)
 	if err == nil {
-		var user models.User
+		var user model.User
 		if err := json.Unmarshal([]byte(cachedContent), &user); err != nil {
 			log.Fatalf("Unable to convert cached content to user. %v", err)
 		}
@@ -52,15 +52,15 @@ func GetUser(id int64) (models.User, error) {
 		log.Fatalf("Unable to convert obj to string. %v", err)
 	}
 
-	helper.Set(cacheKey, string(serialized), 0)
+	redis.Set(cacheKey, string(serialized), 0)
 
 	return user, err
 }
 
-func CreateUser(user *models.User) int64 {
+func CreateUser(user *model.User) int64 {
 	insertId := dao.CreateUser(user)
 
-	_, err := helper.Del("all_users")
+	_, err := redis.Del("all_users")
 	if err != nil {
 		log.Printf("Unable to cleanup all_users cache. %v", err)
 	}
@@ -68,10 +68,10 @@ func CreateUser(user *models.User) int64 {
 	return insertId
 }
 
-func UpdateUser(id int64, user *models.User) int64 {
+func UpdateUser(id int64, user *model.User) int64 {
 	rowsAffected := dao.UpdateUser(id, user)
 
-	_, err := helper.Del("all_users", "user_"+strconv.Itoa(int(id)))
+	_, err := redis.Del("all_users", "user_"+strconv.Itoa(int(id)))
 	if err != nil {
 		log.Printf("Unable to cleanup all_users cache. %v", err)
 	}
@@ -82,7 +82,7 @@ func UpdateUser(id int64, user *models.User) int64 {
 func DeleteUser(id int64) int64 {
 	rowsAffected := dao.DeleteUser(id)
 
-	_, err := helper.Del("all_users", "user_"+strconv.Itoa(int(id)))
+	_, err := redis.Del("all_users", "user_"+strconv.Itoa(int(id)))
 	if err != nil {
 		log.Printf("Unable to cleanup all_users cache. %v", err)
 	}

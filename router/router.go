@@ -1,7 +1,7 @@
 package router
 
 import (
-	"crud-echo-postgres-redis/controllers"
+	"crud-echo-postgres-redis/api/users/controller"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
@@ -19,19 +19,19 @@ func New() *echo.Echo {
 	}))
 
 	e.GET("/users", func(c echo.Context) error {
-		return controllers.GetAllUsers(c)
+		return controller.GetAllUsers(c)
 	})
 	e.POST("/users", func(c echo.Context) error {
-		return controllers.CreateUser(c)
+		return controller.CreateUser(c)
 	})
 	e.GET("/users/:id", func(c echo.Context) error {
-		return controllers.GetUser(c)
+		return controller.GetUser(c)
 	})
 	e.PUT("/users/:id", func(c echo.Context) error {
-		return controllers.UpdateUser(c)
+		return controller.UpdateUser(c)
 	})
 	e.DELETE("/users/:id", func(c echo.Context) error {
-		return controllers.DeleteUser(c)
+		return controller.DeleteUser(c)
 	})
 
 	return e
