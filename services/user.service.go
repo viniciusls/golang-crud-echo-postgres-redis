@@ -9,7 +9,8 @@ import (
 )
 
 func GetAllUsers() ([]models.User, error) {
-	cachedContent, err := helper.Get("all_users")
+	cacheKey := "all_users"
+	cachedContent, err := helper.Get(cacheKey)
 	if err == nil {
 		var users []models.User
 		if err := json.Unmarshal([]byte(cachedContent), &users); err != nil {
@@ -26,7 +27,7 @@ func GetAllUsers() ([]models.User, error) {
 		log.Fatalf("Unable to convert array to string. %v", err)
 	}
 
-	helper.Set("all_users", string(serialized), 0)
+	helper.Set(cacheKey, string(serialized), 0)
 
 	return users, err
 }
