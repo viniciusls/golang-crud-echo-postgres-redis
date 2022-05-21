@@ -9,6 +9,16 @@ import (
 )
 
 func GetAllUsers() ([]models.User, error) {
+	cachedContent, err := helper.Get("all_users")
+	if err == nil {
+		var users []models.User
+		if err := json.Unmarshal([]byte(cachedContent), &users); err != nil {
+			log.Fatalf("Unable to convert cached content to users. %v", err)
+		}
+
+		return users, nil
+	}
+
 	users, err := dao.GetAllUsers()
 
 	serialized, err := json.Marshal(users)

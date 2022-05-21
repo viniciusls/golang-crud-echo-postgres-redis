@@ -41,7 +41,7 @@ func Set(key string, value string, ttl int64) {
 	}
 }
 
-func Get() any {
+func Get(key string) (string, error) {
 	rdb := createConnection()
 
 	defer func(rdb *redis.Client) {
@@ -51,12 +51,12 @@ func Get() any {
 		}
 	}(rdb)
 
-	val, err := rdb.Get(ctx, "key").Result()
+	val, err := rdb.Get(ctx, key).Result()
 	if err != nil {
 		log.Fatalf("Unable to get value from cache")
 
-		return nil
+		return "", err
 	}
 
-	return val
+	return val, nil
 }
