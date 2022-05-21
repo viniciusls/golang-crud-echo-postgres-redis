@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"crud-echo-postgres-redis/dao"
 	"crud-echo-postgres-redis/models"
+	"crud-echo-postgres-redis/services"
 	"fmt"
 	"github.com/labstack/echo/v4"
 	"log"
@@ -16,12 +16,12 @@ type response struct {
 }
 
 func GetAllUsers(c echo.Context) error {
-	users, err := dao.GetAllUsers()
+	users, err := services.GetAllUsers()
 	if err != nil {
 		log.Fatalf("Unable to get all users. %v", err)
 	}
 
-	return c.JSON(http.StatusCreated, users)
+	return c.JSON(http.StatusOK, users)
 }
 
 func GetUser(c echo.Context) error {
@@ -30,12 +30,12 @@ func GetUser(c echo.Context) error {
 		log.Fatalf("Unable to decode the request body. %v", err)
 	}
 
-	user, err := dao.GetUser(int64(id))
+	user, err := services.GetUser(int64(id))
 	if err != nil {
 		log.Fatalf("Unable to get user. %v", err)
 	}
 
-	return c.JSON(http.StatusCreated, user)
+	return c.JSON(http.StatusOK, user)
 }
 
 func CreateUser(c echo.Context) error {
@@ -45,7 +45,7 @@ func CreateUser(c echo.Context) error {
 		log.Fatalf("Unable to decode the request body. %v", err)
 	}
 
-	insertId := dao.InsertUser(user)
+	insertId := services.CreateUser(user)
 
 	res := response{
 		Id:      insertId,
@@ -62,13 +62,13 @@ func UpdateUser(c echo.Context) error {
 		log.Fatalf("Unable to decode the request body. %v", err)
 	}
 
-	var user models.User
+	user := new(models.User)
 
 	if err := c.Bind(user); err != nil {
 		log.Fatalf("Unable to decode the request body. %v", err)
 	}
 
-	updatedRows := dao.UpdateUser(int64(id), user)
+	updatedRows := services.UpdateUser(int64(id), user)
 
 	msg := fmt.Sprintf("User updated successfully. Total rows/records affected %v", updatedRows)
 
@@ -87,7 +87,7 @@ func DeleteUser(c echo.Context) error {
 		log.Fatalf("Unable to decode the request body. %v", err)
 	}
 
-	updatedRows := dao.DeleteUser(int64(id))
+	updatedRows := services.DeleteUser(int64(id))
 
 	msg := fmt.Sprintf("User updated successfully. Total rows/records affected %v", updatedRows)
 
@@ -96,5 +96,5 @@ func DeleteUser(c echo.Context) error {
 		Message: msg,
 	}
 
-	return c.JSON(http.StatusCreated, res)
+	return c.JSON(http.StatusOK, res)
 }

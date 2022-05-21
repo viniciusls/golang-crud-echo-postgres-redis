@@ -101,7 +101,7 @@ func GetUser(id int64) (models.User, error) {
 	return user, err
 }
 
-func InsertUser(user *models.User) int64 {
+func CreateUser(user *models.User) int64 {
 	db := createConnection()
 
 	defer func(db *sql.DB) {
@@ -125,7 +125,7 @@ func InsertUser(user *models.User) int64 {
 	return id
 }
 
-func UpdateUser(id int64, user models.User) int64 {
+func UpdateUser(id int64, user *models.User) int64 {
 	db := createConnection()
 
 	defer func(db *sql.DB) {
