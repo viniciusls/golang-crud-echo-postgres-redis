@@ -56,7 +56,7 @@ func CreateUser(c echo.Context) error {
 }
 
 func UpdateUser(c echo.Context) error {
-	id, err := strconv.Atoi(c.FormValue("id"))
+	id, err := strconv.Atoi(c.Param("id"))
 
 	if err != nil {
 		log.Fatalf("Unable to decode the request body. %v", err)
@@ -81,7 +81,7 @@ func UpdateUser(c echo.Context) error {
 }
 
 func DeleteUser(c echo.Context) error {
-	id, err := strconv.Atoi(c.FormValue("id"))
+	id, err := strconv.Atoi(c.Param("id"))
 
 	if err != nil {
 		log.Fatalf("Unable to decode the request body. %v", err)
@@ -89,7 +89,7 @@ func DeleteUser(c echo.Context) error {
 
 	updatedRows := services.DeleteUser(int64(id))
 
-	msg := fmt.Sprintf("User updated successfully. Total rows/records affected %v", updatedRows)
+	msg := fmt.Sprintf("User deleted successfully. Total rows/records affected %v", updatedRows)
 
 	res := response{
 		Id:      int64(id),

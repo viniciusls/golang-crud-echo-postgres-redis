@@ -61,7 +61,7 @@ func Get(key string) (string, error) {
 	return val, nil
 }
 
-func Del(key string) (bool, error) {
+func Del(key ...string) (bool, error) {
 	rdb := createConnection()
 
 	defer func(rdb *redis.Client) {
@@ -71,7 +71,7 @@ func Del(key string) (bool, error) {
 		}
 	}(rdb)
 
-	_, err := rdb.Del(ctx, key).Result()
+	_, err := rdb.Del(ctx, key...).Result()
 	if err != nil {
 		log.Printf("Unable to delete value from cache. %v", err)
 

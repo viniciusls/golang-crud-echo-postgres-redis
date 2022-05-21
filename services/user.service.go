@@ -69,9 +69,23 @@ func CreateUser(user *models.User) int64 {
 }
 
 func UpdateUser(id int64, user *models.User) int64 {
-	return dao.UpdateUser(id, user)
+	rowsAffected := dao.UpdateUser(id, user)
+
+	_, err := helper.Del("all_users", "user_"+strconv.Itoa(int(id)))
+	if err != nil {
+		log.Printf("Unable to cleanup all_users cache. %v", err)
+	}
+
+	return rowsAffected
 }
 
 func DeleteUser(id int64) int64 {
-	return dao.DeleteUser(id)
+	rowsAffected := dao.DeleteUser(id)
+
+	_, err := helper.Del("all_users", "user_"+strconv.Itoa(int(id)))
+	if err != nil {
+		log.Printf("Unable to cleanup all_users cache. %v", err)
+	}
+
+	return rowsAffected
 }
