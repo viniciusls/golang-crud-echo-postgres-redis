@@ -37,7 +37,7 @@ func Set(key string, value string, ttl int64) {
 
 	err := rdb.Set(ctx, key, value, time.Duration(ttl)).Err()
 	if err != nil {
-		log.Fatalf("Unable to set value in cache")
+		log.Fatalf("Unable to set value in cache. %v", err)
 	}
 }
 
@@ -53,7 +53,7 @@ func Get(key string) (string, error) {
 
 	val, err := rdb.Get(ctx, key).Result()
 	if err != nil {
-		log.Fatalf("Unable to get value from cache")
+		log.Printf("Unable to get value from cache. %v", err)
 
 		return "", err
 	}

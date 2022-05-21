@@ -25,7 +25,7 @@ func GetAllUsers(c echo.Context) error {
 }
 
 func GetUser(c echo.Context) error {
-	id, err := strconv.Atoi(c.FormValue("id"))
+	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		log.Fatalf("Unable to decode the request body. %v", err)
 	}

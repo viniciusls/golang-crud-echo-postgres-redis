@@ -6,6 +6,7 @@ import (
 	"crud-echo-postgres-redis/models"
 	"encoding/json"
 	"log"
+	"strconv"
 )
 
 func GetAllUsers() ([]models.User, error) {
@@ -33,7 +34,27 @@ func GetAllUsers() ([]models.User, error) {
 }
 
 func GetUser(id int64) (models.User, error) {
-	return dao.GetUser(id)
+	cacheKey := "user_" + strconv.Itoa(int(id))
+	cachedContent, err := helper.Get(cacheKey)
+	if err == nil {
+		var user models.User
+		if err := json.Unmarshal([]byte(cachedContent), &user); err != nil {
+			log.Fatalf("Unable to convert cached content to user. %v", err)
+		}
+
+		return user, nil
+	}
+
+	user, err := dao.GetUser(id)
+
+	serialized, err := json.Marshal(user)
+	if err != nil {
+		log.Fatalf("Unable to convert obj to string. %v", err)
+	}
+
+	helper.Set(cacheKey, string(serialized), 0)
+
+	return user, err
 }
 
 func CreateUser(user *models.User) int64 {
