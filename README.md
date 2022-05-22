@@ -5,5 +5,5 @@ This is a CRUD application for studying purposes using the following tools:
 - [Viper](https://github.com/spf13/viper) - Viper is a complete configuration solution for Go applications including 12-Factor apps
 - Postgres
 - Redis
-- Swagger - soon!
+- Swagger with [echo-swagger](https://github.com/swaggo/echo-swagger) - API documentation
 - New Relic - soon!
