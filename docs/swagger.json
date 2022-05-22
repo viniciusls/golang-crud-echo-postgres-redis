@@ -1,10 +1,26 @@
 {
+    "schemes": [
+        "http"
+    ],
     "swagger": "2.0",
     "info": {
-        "contact": {}
+        "description": "This is a sample Go Lang CRUD application.",
+        "title": "Go Lang CRUD",
+        "contact": {
+            "name": "Vinícius Silva",
+            "url": "https://www.viniciusls.com.br",
+            "email": "vinicius.ls@live.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0"
     },
+    "host": "localhost:8080",
+    "basePath": "/",
     "paths": {
-        "/": {
+        "/health": {
             "get": {
                 "description": "get the status of server.",
                 "consumes": [
@@ -14,7 +30,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "root"
+                    "HealthCheck"
                 ],
                 "summary": "Show the status of server.",
                 "responses": {

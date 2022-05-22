@@ -10,13 +10,21 @@ const docTemplate = `{
     "info": {
         "description": "{{escape .Description}}",
         "title": "{{.Title}}",
-        "contact": {},
+        "contact": {
+            "name": "Vinícius Silva",
+            "url": "https://www.viniciusls.com.br",
+            "email": "vinicius.ls@live.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
         "version": "{{.Version}}"
     },
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/": {
+        "/health": {
             "get": {
                 "description": "get the status of server.",
                 "consumes": [
@@ -26,7 +34,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "root"
+                    "HealthCheck"
                 ],
                 "summary": "Show the status of server.",
                 "responses": {
@@ -45,12 +53,12 @@ const docTemplate = `{
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
-	Version:          "",
-	Host:             "",
-	BasePath:         "",
-	Schemes:          []string{},
-	Title:            "",
-	Description:      "",
+	Version:          "1.0",
+	Host:             "localhost:8080",
+	BasePath:         "/",
+	Schemes:          []string{"http"},
+	Title:            "Go Lang CRUD",
+	Description:      "This is a sample Go Lang CRUD application.",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 }

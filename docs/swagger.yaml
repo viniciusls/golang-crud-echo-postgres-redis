@@ -1,7 +1,18 @@
+basePath: /
+host: localhost:8080
 info:
-  contact: {}
+  contact:
+    email: vinicius.ls@live.com
+    name: Vinícius Silva
+    url: https://www.viniciusls.com.br
+  description: This is a sample Go Lang CRUD application.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  title: Go Lang CRUD
+  version: "1.0"
 paths:
-  /:
+  /health:
     get:
       consumes:
       - '*/*'
@@ -16,5 +27,7 @@ paths:
             type: object
       summary: Show the status of server.
       tags:
-      - root
+      - HealthCheck
+schemes:
+- http
 swagger: "2.0"

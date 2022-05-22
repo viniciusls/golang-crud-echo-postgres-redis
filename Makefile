@@ -1,10 +1,10 @@
 all: build run
 
 build:
-	go build server.go
+	go build main.go
 
 run:
-	go run server.go
+	go run main.go
 
 clean:
 	go mod tidy
