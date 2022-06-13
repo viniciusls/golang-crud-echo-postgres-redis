@@ -3,13 +3,29 @@ package router
 import (
 	"crud-echo-postgres-redis/api/users/controller"
 	_ "crud-echo-postgres-redis/docs"
+	nr "crud-echo-postgres-redis/newrelic"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	"github.com/labstack/gommon/log"
 	echoSwagger "github.com/swaggo/echo-swagger"
 	"net/http"
 )
 
 func New() *echo.Echo {
+	newRelicApp, err := nr.InitNewRelicApp()
+
+	// logs an error if New Relic failed to start
+	if err != nil {
+		log.Error(err)
+	}
+
+	newRelicApp.RecordCustomEvent("InitRouter", map[string]interface{}{
+		"myString": "hello",
+		"myFloat":  0.603,
+		"myInt":    123,
+		"myBool":   true,
+	})
+
 	e := echo.New()
 	e.HideBanner = true
 	e.HidePort = true

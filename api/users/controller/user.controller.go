@@ -3,6 +3,7 @@ package controller
 import (
 	"crud-echo-postgres-redis/api/users/model"
 	"crud-echo-postgres-redis/api/users/service"
+	nr "crud-echo-postgres-redis/newrelic"
 	"fmt"
 	"github.com/labstack/echo/v4"
 	"log"
@@ -16,6 +17,15 @@ type response struct {
 }
 
 func GetAllUsers(c echo.Context) error {
+	newRelicApp := nr.GetNewRelicApp()
+
+	newRelicApp.RecordCustomEvent("GetAllUsers", map[string]interface{}{
+		"myString": "hello",
+		"myFloat":  0.603,
+		"myInt":    123,
+		"myBool":   true,
+	})
+
 	users, err := service.GetAllUsers()
 	if err != nil {
 		log.Fatalf("Unable to get all users. %v", err)
