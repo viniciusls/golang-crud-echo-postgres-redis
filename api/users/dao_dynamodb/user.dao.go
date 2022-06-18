@@ -14,10 +14,10 @@ import (
 )
 
 type Item struct {
-	Id       string
-	Name     string
-	Location string
-	Age      int64
+	Id     string
+	Nome   string
+	Cidade string
+	Idade  int64
 }
 
 const tableName = "users"
@@ -84,10 +84,10 @@ func CreateUser(user *model.User) string {
 
 	id := uuid.New().String()
 	item := Item{
-		Id:       id,
-		Name:     user.Name,
-		Location: user.Location,
-		Age:      user.Age,
+		Id:     id,
+		Nome:   user.Name,
+		Cidade: user.Location,
+		Idade:  user.Age,
 	}
 
 	av, err := dynamodbattribute.MarshalMap(item)
@@ -113,13 +113,10 @@ func UpdateUser(id string, user *model.User) int64 {
 
 	input := &dynamodb.UpdateItemInput{
 		ExpressionAttributeValues: map[string]*dynamodb.AttributeValue{
-			":name": {
-				S: aws.String(user.Name),
-			},
-			":location": {
+			":l": {
 				S: aws.String(user.Location),
 			},
-			":age": {
+			":a": {
 				N: aws.String(strconv.FormatInt(user.Age, 10)),
 			},
 		},
@@ -128,9 +125,12 @@ func UpdateUser(id string, user *model.User) int64 {
 			"Id": {
 				S: aws.String(id),
 			},
+			"Nome": {
+				S: aws.String(user.Name),
+			},
 		},
 		ReturnValues:     aws.String("UPDATED_NEW"),
-		UpdateExpression: aws.String("set Name = :name, Location = :location, Age = :age"),
+		UpdateExpression: aws.String("set Cidade = :l, Idade = :a"),
 	}
 
 	_, err := db.UpdateItem(input)
