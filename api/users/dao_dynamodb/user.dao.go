@@ -113,6 +113,9 @@ func UpdateUser(id string, user *model.User) int64 {
 
 	input := &dynamodb.UpdateItemInput{
 		ExpressionAttributeValues: map[string]*dynamodb.AttributeValue{
+			":n": {
+				S: aws.String(user.Name),
+			},
 			":l": {
 				S: aws.String(user.Location),
 			},
@@ -125,12 +128,9 @@ func UpdateUser(id string, user *model.User) int64 {
 			"Id": {
 				S: aws.String(id),
 			},
-			"Nome": {
-				S: aws.String(user.Name),
-			},
 		},
 		ReturnValues:     aws.String("UPDATED_NEW"),
-		UpdateExpression: aws.String("set Cidade = :l, Idade = :a"),
+		UpdateExpression: aws.String("set Nome = :n, Cidade = :l, Idade = :a"),
 	}
 
 	_, err := db.UpdateItem(input)
