@@ -6,7 +6,6 @@ import (
 	"github.com/newrelic/go-agent/v3/integrations/nrlogrus"
 	"github.com/newrelic/go-agent/v3/newrelic"
 	"github.com/sirupsen/logrus"
-	"log"
 	"math/rand"
 	"time"
 )
@@ -24,7 +23,7 @@ func InitNewRelicApp() (*newrelic.Application, *errorx.Error) {
 		newrelic.ConfigDistributedTracerEnabled(true),
 		newrelic.ConfigFromEnvironment(),
 		func(config *newrelic.Config) {
-			logrus.SetLevel(logrus.DebugLevel)
+			logrus.SetLevel(logrus.ErrorLevel)
 			config.Logger = nrlogrus.StandardLogger()
 		},
 	)
@@ -33,12 +32,10 @@ func InitNewRelicApp() (*newrelic.Application, *errorx.Error) {
 		panic(err)
 	}
 
-	log.Print("Before sleep")
 	err = app.WaitForConnection(5 * time.Second)
 	if err != nil {
 		panic(err)
 	}
-	log.Print("After sleep")
 
 	go app.RecordCustomMetric("init_application_metric", float64(rand.Intn(1000)))
 	go app.RecordCustomEvent("InitApplication", map[string]interface{}{
