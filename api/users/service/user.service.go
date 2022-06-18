@@ -11,16 +11,21 @@ import (
 func GetAllUsers() ([]model.User, error) {
 	cacheKey := "all_users"
 	cachedContent, err := redis.Get(cacheKey)
-	if err == nil {
+	log.Print(cachedContent)
+	if err == nil && cachedContent != "null" {
 		var users []model.User
-		if err := json.Unmarshal([]byte(cachedContent), &users); err != nil {
-			log.Fatalf("Unable to convert cached content to users. %v", err)
+
+		if cachedContent != "null" {
+			if err := json.Unmarshal([]byte(cachedContent), &users); err != nil {
+				log.Fatalf("Unable to convert cached content to users. %v", err)
+			}
 		}
 
 		return users, nil
 	}
 
 	users, err := dao.GetAllUsers()
+	log.Print(users)
 
 	serialized, err := json.Marshal(users)
 	if err != nil {

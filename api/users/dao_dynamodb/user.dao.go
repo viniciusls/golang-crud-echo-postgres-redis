@@ -8,20 +8,16 @@ import (
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
+	"github.com/google/uuid"
 	"log"
 	"strconv"
-
-	_ "github.com/aws/aws-sdk-go/aws"
-	_ "github.com/aws/aws-sdk-go/aws/session"
-	_ "github.com/aws/aws-sdk-go/service/dynamodb"
-	_ "github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 )
 
 type Item struct {
 	Id       string
 	Name     string
 	Location string
-	Age      int
+	Age      int64
 }
 
 const tableName = "users"
@@ -86,10 +82,15 @@ func GetUser(id string) (model.User, error) {
 func CreateUser(user *model.User) string {
 	db := createConnection()
 
-	id := "a"
-	user.Id = id
+	id := uuid.New().String()
+	item := Item{
+		Id:       id,
+		Name:     user.Name,
+		Location: user.Location,
+		Age:      user.Age,
+	}
 
-	av, err := dynamodbattribute.MarshalMap(user)
+	av, err := dynamodbattribute.MarshalMap(item)
 	if err != nil {
 		log.Fatalf("Got error marshalling new movie item: %s", err)
 	}
