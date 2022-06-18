@@ -92,7 +92,7 @@ func CreateUser(user *model.User) string {
 
 	av, err := dynamodbattribute.MarshalMap(item)
 	if err != nil {
-		log.Fatalf("Got error marshalling new movie item: %s", err)
+		log.Fatalf("Got error marshalling new user item: %s", err)
 	}
 
 	input := &dynamodb.PutItemInput{
