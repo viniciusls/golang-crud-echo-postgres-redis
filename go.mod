@@ -3,6 +3,7 @@ module crud-echo-postgres-redis
 go 1.18
 
 require (
+	github.com/aws/aws-sdk-go v1.44.37
 	github.com/go-redis/redis/v8 v8.11.5
 	github.com/joomcode/errorx v1.1.0
 	github.com/labstack/echo/v4 v4.7.2
@@ -30,6 +31,7 @@ require (
 	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
+	github.com/jmespath/go-jmespath v0.4.0 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/magiconair/properties v1.8.6 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect

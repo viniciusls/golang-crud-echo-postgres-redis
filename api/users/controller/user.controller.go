@@ -8,11 +8,10 @@ import (
 	"github.com/labstack/echo/v4"
 	"log"
 	"net/http"
-	"strconv"
 )
 
 type response struct {
-	Id      int64  `json:"id,omitempty"`
+	Id      string `json:"id,omitempty"`
 	Message string `json:"message,omitempty"`
 }
 
@@ -35,12 +34,9 @@ func GetAllUsers(c echo.Context) error {
 }
 
 func GetUser(c echo.Context) error {
-	id, err := strconv.Atoi(c.Param("id"))
-	if err != nil {
-		log.Fatalf("Unable to decode the request body. %v", err)
-	}
+	id := c.Param("id")
 
-	user, err := service.GetUser(int64(id))
+	user, err := service.GetUser(id)
 	if err != nil {
 		log.Fatalf("Unable to get user. %v", err)
 	}
@@ -66,11 +62,7 @@ func CreateUser(c echo.Context) error {
 }
 
 func UpdateUser(c echo.Context) error {
-	id, err := strconv.Atoi(c.Param("id"))
-
-	if err != nil {
-		log.Fatalf("Unable to decode the request body. %v", err)
-	}
+	id := c.Param("id")
 
 	user := new(model.User)
 
@@ -78,12 +70,12 @@ func UpdateUser(c echo.Context) error {
 		log.Fatalf("Unable to decode the request body. %v", err)
 	}
 
-	updatedRows := service.UpdateUser(int64(id), user)
+	updatedRows := service.UpdateUser(id, user)
 
 	msg := fmt.Sprintf("User updated successfully. Total rows/records affected %v", updatedRows)
 
 	res := response{
-		Id:      int64(id),
+		Id:      id,
 		Message: msg,
 	}
 
@@ -91,18 +83,14 @@ func UpdateUser(c echo.Context) error {
 }
 
 func DeleteUser(c echo.Context) error {
-	id, err := strconv.Atoi(c.Param("id"))
+	id := c.Param("id")
 
-	if err != nil {
-		log.Fatalf("Unable to decode the request body. %v", err)
-	}
-
-	updatedRows := service.DeleteUser(int64(id))
+	updatedRows := service.DeleteUser(id)
 
 	msg := fmt.Sprintf("User deleted successfully. Total rows/records affected %v", updatedRows)
 
 	res := response{
-		Id:      int64(id),
+		Id:      id,
 		Message: msg,
 	}
 

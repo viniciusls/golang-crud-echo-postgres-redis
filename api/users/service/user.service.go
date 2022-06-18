@@ -1,12 +1,11 @@
 package service
 
 import (
-	"crud-echo-postgres-redis/api/users/dao"
+	"crud-echo-postgres-redis/api/users/dao_dynamodb"
 	"crud-echo-postgres-redis/api/users/model"
 	"crud-echo-postgres-redis/redis"
 	"encoding/json"
 	"log"
-	"strconv"
 )
 
 func GetAllUsers() ([]model.User, error) {
@@ -33,8 +32,8 @@ func GetAllUsers() ([]model.User, error) {
 	return users, err
 }
 
-func GetUser(id int64) (model.User, error) {
-	cacheKey := "user_" + strconv.Itoa(int(id))
+func GetUser(id string) (model.User, error) {
+	cacheKey := "user_" + id
 	cachedContent, err := redis.Get(cacheKey)
 	if err == nil {
 		var user model.User
@@ -57,7 +56,7 @@ func GetUser(id int64) (model.User, error) {
 	return user, err
 }
 
-func CreateUser(user *model.User) int64 {
+func CreateUser(user *model.User) string {
 	insertId := dao.CreateUser(user)
 
 	_, err := redis.Del("all_users")
@@ -68,10 +67,10 @@ func CreateUser(user *model.User) int64 {
 	return insertId
 }
 
-func UpdateUser(id int64, user *model.User) int64 {
+func UpdateUser(id string, user *model.User) int64 {
 	rowsAffected := dao.UpdateUser(id, user)
 
-	_, err := redis.Del("all_users", "user_"+strconv.Itoa(int(id)))
+	_, err := redis.Del("all_users", "user_"+id)
 	if err != nil {
 		log.Printf("Unable to cleanup all_users cache. %v", err)
 	}
@@ -79,10 +78,10 @@ func UpdateUser(id int64, user *model.User) int64 {
 	return rowsAffected
 }
 
-func DeleteUser(id int64) int64 {
+func DeleteUser(id string) int64 {
 	rowsAffected := dao.DeleteUser(id)
 
-	_, err := redis.Del("all_users", "user_"+strconv.Itoa(int(id)))
+	_, err := redis.Del("all_users", "user_"+id)
 	if err != nil {
 		log.Printf("Unable to cleanup all_users cache. %v", err)
 	}
