@@ -3,6 +3,7 @@ module crud-echo-postgres-redis
 go 1.18
 
 require (
+	github.com/confluentinc/confluent-kafka-go v1.9.0
 	github.com/go-redis/redis/v8 v8.11.5
 	github.com/joomcode/errorx v1.1.0
 	github.com/labstack/echo/v4 v4.7.2

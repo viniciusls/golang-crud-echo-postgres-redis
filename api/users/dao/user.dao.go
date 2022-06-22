@@ -25,8 +25,6 @@ func createConnection() *sql.DB {
 		panic(err)
 	}
 
-	fmt.Println("Successfully connected to database!")
-
 	return db
 }
 

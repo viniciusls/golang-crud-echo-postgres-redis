@@ -1,6 +1,7 @@
 package main
 
 import (
+	"crud-echo-postgres-redis/api/users/listener"
 	"crud-echo-postgres-redis/router"
 )
 
@@ -19,6 +20,8 @@ import (
 // @BasePath /
 // @schemes http
 func main() {
+	go listener.Run()
+
 	e := router.New()
 
 	e.Logger.Fatal(e.Start(":8080"))

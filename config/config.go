@@ -6,6 +6,7 @@ type Config struct {
 	DBDriver           string `mapstructure:"DB_DRIVER"`
 	DBSource           string `mapstructure:"DB_SOURCE"`
 	CacheSource        string `mapstructure:"CACHE_SOURCE"`
+	KafkaSource        string `mapstructure:"KAFKA_SOURCE"`
 	NewRelicAppName    string `mapstructure:"NEW_RELIC_APP_NAME"`
 	NewRelicLicenseKey string `mapstructure:"NEW_RELIC_LICENSE_KEY"`
 }

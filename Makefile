@@ -1,10 +1,10 @@
 all: build run
 
 build:
-	go build main.go
+	go build -tags dynamic main.go
 
 run:
-	go run main.go
+	go run -tags dynamic main.go
 
 clean:
 	go mod tidy

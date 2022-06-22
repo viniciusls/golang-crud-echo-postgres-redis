@@ -3,7 +3,6 @@ package redis
 import (
 	"context"
 	"crud-echo-postgres-redis/config"
-	"fmt"
 	"github.com/go-redis/redis/v8"
 	"log"
 	"time"
@@ -22,8 +21,6 @@ func createConnection() *redis.Client {
 		Password: "", // no password set
 		DB:       0,  // use default DB
 	})
-
-	fmt.Println("Successfully connected to Redis!")
 
 	return rdb
 }

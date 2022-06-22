@@ -4,6 +4,7 @@ import (
 	"crud-echo-postgres-redis/api/users/controller"
 	_ "crud-echo-postgres-redis/docs"
 	nr "crud-echo-postgres-redis/newrelic"
+	"fmt"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/labstack/gommon/log"
@@ -12,6 +13,8 @@ import (
 )
 
 func New() *echo.Echo {
+	fmt.Println("Starting Echo app")
+
 	newRelicApp, err := nr.InitNewRelicApp()
 
 	// logs an error if New Relic failed to start
