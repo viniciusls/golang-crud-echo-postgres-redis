@@ -13,7 +13,7 @@ require (
 	github.com/sirupsen/logrus v1.8.1
 	github.com/spf13/viper v1.11.0
 	github.com/swaggo/echo-swagger v1.3.2
-	github.com/swaggo/swag v1.8.2
+	github.com/swaggo/swag v1.8.4
 )
 
 require (
