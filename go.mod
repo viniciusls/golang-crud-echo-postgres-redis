@@ -5,7 +5,7 @@ go 1.18
 require (
 	github.com/go-redis/redis/v8 v8.11.5
 	github.com/joomcode/errorx v1.1.0
-	github.com/labstack/echo/v4 v4.7.2
+	github.com/labstack/echo/v4 v4.9.0
 	github.com/labstack/gommon v0.3.1
 	github.com/lib/pq v1.10.6
 	github.com/newrelic/go-agent/v3 v3.16.1
