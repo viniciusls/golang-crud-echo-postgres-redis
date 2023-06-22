@@ -7,7 +7,7 @@ require (
 	github.com/joomcode/errorx v1.1.0
 	github.com/labstack/echo/v4 v4.7.2
 	github.com/labstack/gommon v0.3.1
-	github.com/lib/pq v1.10.6
+	github.com/lib/pq v1.10.9
 	github.com/newrelic/go-agent/v3 v3.16.1
 	github.com/newrelic/go-agent/v3/integrations/nrlogrus v1.0.1
 	github.com/sirupsen/logrus v1.8.1
